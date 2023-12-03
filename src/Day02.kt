@@ -19,11 +19,8 @@ class Bag(
     fun isBagPossible(): Boolean {
         return redCube<=12 && greenCube<=13 && blueCube<=14
     }
-
-    override fun toString(): String {
-        return "$redCube red - $greenCube green - $blueCube blue"
-    }
 }
+
 class Game(
     var gameId: Int = 0,
     var sets: MutableList<Bag> = mutableListOf()
@@ -39,10 +36,6 @@ class Game(
         return this
     }
 
-    fun printGame() {
-        println("${this.gameId} - ${this.sets}")
-    }
-
     fun isGamePossible(): Boolean {
         for (set in sets) if(!set.isBagPossible()) return false
 
@@ -55,7 +48,7 @@ class Game(
 fun main() {
     fun part1(input: List<String>): Int {
         val allGames = mutableListOf<Game>()
-        var possibleGamesIdsSum: Int = 0
+        var possibleGamesIdsSum = 0
 
         input.forEach { s -> allGames.add(Game().getGameFromData(s)) }
         allGames.forEach { game ->
