@@ -23,7 +23,7 @@ class Bag(
 
 class Game(
     var gameId: Int = 0,
-    var sets: MutableList<Bag> = mutableListOf()
+    var bags: MutableList<Bag> = mutableListOf()
 ) {
     fun getGameFromData(game: String) : Game{
         this.gameId = game.split(':')[0].takeLastWhile { it.isDigit() }.toInt()
@@ -31,13 +31,13 @@ class Game(
         for (s in stringData) {
             val colorsNumbers = s.split(',')
             val bag = Bag().setBagFromData(colorsNumbers)
-            sets.add(bag)
+            bags.add(bag)
         }
         return this
     }
 
     fun isGamePossible(): Boolean {
-        for (set in sets) if(!set.isBagPossible()) return false
+        for (set in bags) if(!set.isBagPossible()) return false
 
         return true
     }
@@ -58,19 +58,36 @@ fun main() {
         return possibleGamesIdsSum
     }
 
-    fun part2(input: List<String>): Int {
 
-        return -1
+    fun part2(input: List<String>): Int {
+        // Load data
+        val allGames = mutableListOf<Game>()
+        input.forEach { s -> allGames.add(Game().getGameFromData(s)) }
+
+        var maxColors = mutableListOf<Int>(-1,-1,-1)
+        var sum = 0
+
+        for (game in allGames) {
+            game.bags.forEach {
+                if (it.redCube>maxColors[0]) maxColors[0]=it.redCube
+                if (it.greenCube>maxColors[1]) maxColors[1]=it.greenCube
+                if (it.blueCube>maxColors[2]) maxColors[2]=it.blueCube
+            }
+            sum += maxColors[0]*maxColors[1]*maxColors[2]
+            maxColors = mutableListOf(-1,-1,-1)
+
+        }
+
+        return sum
     }
 
 
 
     // test if implementation meets criteria from the description, like:
     val testInput = readInput("Day02_test")
-    part1(testInput)
+    part2(testInput)
 
-
-    check(part1(testInput) == 8)
+    check(part2(testInput) == 2286)
 
     val input = readInput("Day02")
     part1(input).println()
