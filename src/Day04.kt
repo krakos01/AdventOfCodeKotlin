@@ -19,9 +19,41 @@ fun main() {
 
 
     fun part2(input: List<String>): Int {
+        var ret = 0
+        var cards = ArrayList<Int>()
+        for(i in input.indices) {
+            cards.add(1)
+        }
+        for(i in input.indices) {
+            var s = input[i]
+            var l = s.split("\\s+".toRegex())
+            var winners = HashSet<Int>()
+            var iswinner = true
+            var amt = 0
 
-
-        return -1
+            for(b in 2 until l.size) {
+                if(l[b] == "|") {
+                    iswinner = false
+                }
+                else {
+                    if(iswinner) {
+                        winners.add(l[b].toInt())
+                    }
+                    else {
+                        if(winners.contains(l[b].toInt())) {
+                            amt++
+                        }
+                    }
+                }
+            }
+            for(j in 0 until amt) {
+                cards[i+j+1] += cards[i]
+            }
+        }
+        for(x in cards) {
+            ret += x
+        }
+        return ret
     }
 
 
@@ -34,7 +66,4 @@ fun main() {
     val input = readInput("Day04")
     part1(input).println()
     part2(input).println()
-
-
-
 }
